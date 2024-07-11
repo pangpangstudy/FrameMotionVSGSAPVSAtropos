@@ -1,11 +1,9 @@
-import React from "react";
-
 type Props = {};
 
 function Navbar({}: Props) {
   return (
-    <div className="container fixed z-[999] w-full py-6 flex justify-between items-center font-serif">
-      <div className="logo">
+    <header className="px-5 xl:px-12 shadow-inner-top fixed z-[999] top-0 w-full py-4 flex items-center">
+      <div className="logo flex-1">
         <svg
           width="72"
           height="30"
@@ -35,15 +33,15 @@ function Navbar({}: Props) {
           ></path>
         </svg>
       </div>
-      <div className="links flex gap-10">
-        {["Services", "Our Wok", "About us", "Insights", "Contact"].map(
+      <div className="links flex-1 flex gap-x-4 xl:gap-x-[1.4vw]">
+        {["Services", "Our Wok", "About us", "Insights", "Contact us"].map(
           (item, index) => {
             return (
               <a
                 href="#"
                 key={index}
-                className={`text-lg capitalize font-light  ${
-                  index === 4 && "ml-32"
+                className={`text-base xl:text-[1.1vw] capitalize font-neueMontreal  ${
+                  index === 4 && "ml-auto"
                 }`}
               >
                 {item}
@@ -52,7 +50,7 @@ function Navbar({}: Props) {
           }
         )}
       </div>
-    </div>
+    </header>
   );
 }
 
