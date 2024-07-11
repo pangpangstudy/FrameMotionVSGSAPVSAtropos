@@ -1,21 +1,32 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useEffect } from "react";
+import { angleC } from "../utils";
 
 function Eyes() {
-  const [rotate, setRotate] = useState(0);
-
+  const [rotateL, setRotateL] = useState(0);
+  const [rotateR, setRotateR] = useState(0);
+  const refL = useRef<HTMLDivElement>(null);
+  const refR = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    window.addEventListener("mousemove", (event) => {
-      let mouseX = event.clientX;
-      let mouseY = event.clientY;
-
-      let deltaX = mouseX - window.innerWidth / 2;
-      let deltaY = mouseY - window.innerHeight / 2;
-
-      let angle = Math.atan2(deltaY, deltaX) * (180 / Math.PI);
-      setRotate(angle - 180);
-    });
-  });
+    const handleL = (event: MouseEvent) => {
+      const angle = angleC(refL, event);
+      setRotateL(angle - 180);
+    };
+    const handleR = (event: MouseEvent) => {
+      const angle = angleC(refR, event);
+      setRotateR(angle - 180);
+    };
+    if (refL.current) {
+      window.addEventListener("mousemove", handleL);
+    }
+    if (refR.current) {
+      window.addEventListener("mousemove", handleR);
+    }
+    return () => {
+      window.removeEventListener("mousemove", handleL);
+      window.removeEventListener("mousemove", handleR);
+    };
+  }, []);
 
   return (
     <div className="eyes w-full h-screen overflow-hidden">
@@ -26,24 +37,26 @@ function Eyes() {
       >
         <div className="absolute top-1/2 left-1/2 -translate-x-[50%] -translate-y-[50%] flex items-center gap-10 ">
           <div className="flex items-center justify-center w-[15vw] h-[15vw] rounded-full bg-zinc-100">
-            <div className="relative w-2/3 h-2/3  rounded-full bg-zinc-900">
+            <div className="relative w-2/3 h-2/3  rounded-full bg-zinc-900 flex items-center justify-center">
               <div
+                ref={refL}
                 style={{
-                  transform: `translate(-50%,-50%) rotate(${rotate}deg)`,
+                  transform: `rotate(${rotateL}deg)`,
                 }}
-                className="line absolute top-1/2 left-1/2 -translate-x-[50%] -translate-y-[50%]  w-full h-15  z-10 "
+                className="line  w-full h-15  z-10 "
               >
                 <div className="w-10 h-10  rounded-full bg-zinc-100"></div>
               </div>
             </div>
           </div>
-          <div className=" w-[15vw] h-[15vw] flex items-center justify-center rounded-full bg-zinc-100">
-            <div className="relative w-2/3 h-2/3  rounded-full bg-zinc-900">
+          <div className="flex items-center justify-center w-[15vw] h-[15vw] rounded-full bg-zinc-100">
+            <div className="relative w-2/3 h-2/3  rounded-full bg-zinc-900 flex items-center justify-center">
               <div
+                ref={refR}
                 style={{
-                  transform: `translate(-50%,-50%) rotate(${rotate}deg)`,
+                  transform: `rotate(${rotateR}deg)`,
                 }}
-                className="line absolute top-1/2 left-1/2 -translate-x-[50%] -translate-y-[50%]  w-full h-15  z-10 "
+                className="line  w-full h-15  z-10 "
               >
                 <div className="w-10 h-10  rounded-full bg-zinc-100"></div>
               </div>
